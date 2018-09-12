@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNetApi\Message;
+namespace Authomnipay\Requests;
 
 /**
  * TODO: Soem of these methods are relevant only to a transaction, so could
@@ -13,11 +13,11 @@ use Academe\AuthorizeNet\Auth\MerchantAuthentication;
 use Academe\AuthorizeNet\TransactionRequestInterface;
 use Academe\AuthorizeNet\Request\CreateTransaction;
 use Academe\AuthorizeNet\Request\AbstractRequest as ApiAbstractRequest;
-use Omnipay\AuthorizeNetApi\Traits\HasGatewayParams;
+use Authomnipay\GatewayParams;
 
 abstract class AbstractRequest extends OmnipayAbstractRequest
 {
-    use HasGatewayParams;
+    use GatewayParams;
 
     /**
      * The live and test gateway endpoints.

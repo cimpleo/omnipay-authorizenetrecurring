@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNetApi\Message;
+namespace Authomnipay\Requests;
 
 /**
  * The TransactionResponse can contain full details of a transaction

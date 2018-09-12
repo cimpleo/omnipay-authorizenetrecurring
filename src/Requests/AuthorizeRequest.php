@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNetApi\Message;
+namespace Authomnipay\Requests;
 
 /**
  * The main authorisation transaction request model.

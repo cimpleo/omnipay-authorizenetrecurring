@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNetApi\Message;
+namespace Authomnipay\Requests;
 
 /**
  * The features of the basic envelope for all responses.
