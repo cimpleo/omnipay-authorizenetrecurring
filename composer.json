@@ -19,14 +19,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "Authomnipay\\": "src/"
+            "Omnipay\\AuthorizeNetRecurring\\": "src/"
         }
     },
     "require": {
         "omnipay/common": "^3",
         "academe/authorizenet-objects": "^0.7",
-        "symfony/property-access": "^3.2",
-        "academe/omnipay-authorizenetapi": "~3.0"
+        "symfony/property-access": "^3.2"
     },
     "require-dev": {
         "omnipay/tests": "^3",
