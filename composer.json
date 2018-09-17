@@ -1,10 +1,11 @@
 {
     "name": "cimpleo-sandbox/laravel-authorize",
     "type": "library",
-    "description": "Authorize.Net payment processing library for the Omnipay 3.x and Laravel 5",
+    "description": "Authorize.Net recurring payment processing library for the Omnipay 3.x and Laravel 5",
     "keywords": [
         "authorize.net",
         "gateway",
+        "recurring",
         "merchant",
         "omnipay",
         "laravel",
@@ -23,12 +24,9 @@
         }
     },
     "require": {
-        "omnipay/common": "^3",
-        "academe/authorizenet-objects": "^0.7",
-        "symfony/property-access": "^3.2"
+        "omnipay/common": "^3"
     },
     "require-dev": {
-        "omnipay/tests": "^3",
-        "squizlabs/php_codesniffer": "^3"
+        "omnipay/tests": "^3"
     }
 }

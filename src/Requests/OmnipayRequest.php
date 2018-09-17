@@ -4,11 +4,6 @@ namespace Omnipay\AuthorizeNetRecurring\Requests;
 
 use Omnipay\Common\Message\AbstractRequest as OmnipayAbstractRequest;
 
-use Academe\AuthorizeNet\Auth\MerchantAuthentication;
-use Academe\AuthorizeNet\TransactionRequestInterface;
-use Academe\AuthorizeNet\Request\CreateTransaction;
-use Academe\AuthorizeNet\Request\AbstractRequest as ApiAbstractRequest;
-
 use Omnipay\AuthorizeNetRecurring\GatewayParams;
 
 class OmnipayRequest extends OmnipayAbstractRequest
@@ -19,9 +14,7 @@ class OmnipayRequest extends OmnipayAbstractRequest
     protected $sandbox = 'https://apitest.authorize.net/xml/v1/request.api';
     protected $production = 'https://api.authorize.net/xml/v1/request.api';
 
-    public function getAuth() {
-         return new MerchantAuthentication($this->getAuthName(), $this->getTransactionKey());
-    }
+    protected $data;
 
     public function getEndpoint() {
         if ($this->getTestMode()) {
@@ -32,37 +25,31 @@ class OmnipayRequest extends OmnipayAbstractRequest
     }
 
     public function sendRequest($data, $method = 'POST') {
-        $response = $this->httpClient->request(
-            $method,
-            $this->getEndpoint(),
-            array(
-                'Content-Type' => 'application/json',
-            ),
-            json_encode($data)
+        $data_string = json_encode($data);
+        $ch = curl_init($this->getEndpoint());
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data_string))
         );
-        return $response;
-    }
-
-    public function sendTransaction(TransactionRequestInterface $transaction) {
-        $request = $this->wrapTransaction($this->getAuth(), $transaction);
-        $request = $request->withRefId($this->getTransactionId());
-        return $this->sendMessage($request);
-    }
-
-    protected function sendMessage(ApiAbstractRequest $message) {
-        $response = $this->sendRequest($message);
-        $body = (string)($response->getBody());
-        $body = $this->removeBOM($body);
-        $data = json_decode($body, true);
-        return $data;
-    }
-
-    protected function wrapTransaction($auth, $transaction) {
-        return new CreateTransaction($auth, $transaction);
+        $response = curl_exec($ch);
+        $assoc = json_decode($this->removeBOM($response),true);
+        $this->data = $data;
+        return $assoc;
     }
 
     public function removeBOM($string) {
         return preg_replace('/^[\x00-\x1F\x80-\xFF]{1,3}/', '', $string);
+    }
+
+    public function getData() {
+        return $this->data;
+    }
+
+    public function sendData($data) {
+        return $this->sendRequest($data);
     }
 
 }
