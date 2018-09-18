@@ -2,6 +2,8 @@
 
 namespace Omnipay\AuthorizeNetRecurring\Requests;
 
+use Omnipay\Common\Http\Client as HttpClient;
+use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest as OmnipayAbstractRequest;
 
 use Omnipay\AuthorizeNetRecurring\GatewayParams;
@@ -24,20 +26,22 @@ class OmnipayRequest extends OmnipayAbstractRequest
         }
     }
 
-    public function sendRequest($data, $method = 'POST') {
-        $data_string = json_encode($data);
-        $ch = curl_init($this->getEndpoint());
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($data_string))
-        );
-        $response = curl_exec($ch);
-        $assoc = json_decode($this->removeBOM($response),true);
-        $this->data = $data;
-        return $assoc;
+    protected function sendRequest($data, $method = 'POST') {
+        try {
+            $this->httpClient = new HttpClient;
+            $response = $this->httpClient->request(
+                $method,
+                $this->getEndpoint(),
+                array('Content-Type' => 'application/json'),
+                json_encode($data)
+            );
+            $body = (string)($response->getBody());
+            $body = $this->removeBOM($body);
+            $this->data = json_decode($body, true);
+            return $this->data;
+        } catch (\Exception $e) {
+            throw new InvalidRequestException($e->getMessage());
+        }
     }
 
     public function removeBOM($string) {
