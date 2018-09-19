@@ -7,117 +7,36 @@ use Omnipay\Common\Exception\InvalidRequestException;
 trait GatewayParams
 {
 
-    //Get Name of this API
-    public function getName() {
-        return 'Authorize.net Recurring API';
-    }
-
-    public function getDefaultParameters() {
-        return array(
-            //API_LOGIN_ID:
-            'authName' => '',
-            //API_TRANSACTION_KEY:
-            'transactionKey' => '',
-            //testMode defined as false means sandbox API, true - production API.
-            'testMode' => false,
-            //Merchant-assigned reference ID for the request.
-            'refId' => '',
-            //Subscription parameters
-            'subscriptionId' => '',
-            'subscriptionName' => '',
-            //Schedule parameters
-            'scheduleIntervalLength' => '',
-            'scheduleIntervalUnit' => '',
-            'scheduleStartDate' => '',
-            'scheduleTotalOccurrences' => '',
-            'scheduleTrialOccurrences' => '',
-            //Amount parameters
-            'amount' => '',
-            'trialAmount' => '',
-            //Payment - Card parameters
-            'cardNumber' => '',
-            'expirationDate' => '',
-            'cardCode' => '',
-            //Payment - Bank Account parameters
-            'BankAccountType' => '',
-            'BankRoutingNumber' => '',
-            'BankAccountNumber' => '',
-            'BankNameOnAccount' => '',
-            'BankEcheckType' => '',
-            'BankName' => '',
-            //Payment = Opaque Data parameters
-            'opaqueDataDescriptor' => '',
-            'opaqueDataValue' => '',
-            //Order parameters
-            'orderInvoiceNumber' => '',
-            'orderDescription' => '',
-            //Customer parameters
-            'customerFirstName' => '',
-            'customerLastName' => '',
-            'customerProfileId' => '',           
-            'customerAddressId' => '',
-            'customerType' => '',
-            'customerId' => '',
-            'customerEmail' => '',
-            'customerPhoneNumber' => '',
-            'customerFaxNumber' => '',
-            //Bill parameters
-            'billToFirstName' => '',
-            'billToLastName' => '',
-            'billToCompany' => '',
-            'billToAddress' => '',
-            'billToCity' => '',
-            'billToState' => '',
-            'billToZip' => '',
-            'billToCountry' => '',
-            //Ship parameters
-            'shipToFirstName' => '',
-            'shipToLastName' => '',
-            'shipToCompany' => '',
-            'shipToAddress' => '',
-            'shipToCity' => '',
-            'shipToState' => '',
-            'shipToZip' => '',
-            'shipToCountry' => '',
-            //Include parameters
-            'includeIssuerInfo' => 'true',
-            'includeTransactions' => 'true'
-        );
-    }
-
+    //Authentification parameters
     public function setAuthName($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Auth name must be a string.');
         }
         return $this->setParameter('authName', $value);
     }
-
     public function getAuthName() {
         return $this->getParameter('authName');
     }
-
-    public function setRefId($value) {
-        if (!is_string($value)) {
-            throw new InvalidRequestException('Ref ID must be a string.');
-        }
-        return $this->setParameter('refId', $value);
-    }
-
-    public function getRefId() {
-        return $this->getParameter('refId');
-    }
-
     public function setTransactionKey($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Transaction Key must be a string.');
         }
         return $this->setParameter('transactionKey', $value);
     }
-
     public function getTransactionKey() {
         return $this->getParameter('transactionKey');
     }
 
+    //Subscription parameters
+    public function setRefId($value) {
+        if (!is_string($value)) {
+            throw new InvalidRequestException('Ref ID must be a string.');
+        }
+        return $this->setParameter('refId', $value);
+    }
+    public function getRefId() {
+        return $this->getParameter('refId');
+    }
     public function setSubscriptionId($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Subscription ID must be a string.');
@@ -136,7 +55,8 @@ trait GatewayParams
     public function getSubscriptionName() {
         return $this->getParameter('subscriptionName');
     }
-//Schedule parameters
+
+    //Schedule parameters
     public function setScheduleIntervalLength($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Schedule Interval Length must be a string.');
@@ -185,7 +105,8 @@ trait GatewayParams
     public function getScheduleTrialOccurrences() {
         return $this->getParameter('scheduleTrialOccurrences');
     }
-//Amount parameters
+
+    //Amount parameters
     public function setAmount($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Amount must be a string.');
@@ -204,7 +125,8 @@ trait GatewayParams
     public function getTrialAmount() {
         return $this->getParameter('trialAmount');
     }
-//Card parameters
+
+    //Card parameters
     public function setCardNumber($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Card Number must be a string.');
@@ -232,7 +154,8 @@ trait GatewayParams
     public function getCardCode() {
         return $this->getParameter('cardCode');
     }
-//Search Parameters
+
+    //Search Parameters
     public function setSearchType($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Search Type must be a string.');
@@ -278,7 +201,8 @@ trait GatewayParams
     public function getOffset() {
         return $this->getParameter('offset');
     }
-//Payment - Bank Account parameters
+
+    //Payment - Bank Account parameters
     public function setBankAccountType($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Bank Account Type must be a string.');
@@ -333,7 +257,8 @@ trait GatewayParams
     public function getBankName() {
         return $this->getParameter('bankName');
     }
-//Payment = Opaque Data parameters
+
+    //Payment = Opaque Data parameters
     public function setOpaqueDataDescriptor($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Opaque Data Descriptor must be a string.');
@@ -352,7 +277,8 @@ trait GatewayParams
     public function getOpaqueDataValue() {
         return $this->getParameter('opaqueDataValue');
     }
-//Order parameters
+
+    //Order parameters
     public function setOrderInvoiceNumber($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Order Invoice Number must be a string.');
@@ -371,7 +297,8 @@ trait GatewayParams
     public function getOrderDescription() {
         return $this->getParameter('orderDescription');
     }
-//Customer parameters
+
+    //Customer parameters
     public function setCustomerFirstName($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Customer First Name must be a string.');
@@ -453,7 +380,8 @@ trait GatewayParams
     public function getCustomerFaxNumber() {
         return $this->getParameter('customerFaxNumber');
     }
-//Bill To parameters
+
+    //Bill To parameters
     public function setBillToFirstName($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Bill To First Name must be a string.');
@@ -526,7 +454,8 @@ trait GatewayParams
     public function getBillToCountry() {
         return $this->getParameter('billToCountry');
     }
-//Ship To parameters
+
+    //Ship To parameters
     public function setShipToFirstName($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Ship To First Name must be a string.');
@@ -599,7 +528,8 @@ trait GatewayParams
     public function getShipToCountry() {
         return $this->getParameter('shipToCountry');
     }
-//Include parameters
+
+    //Include parameters
     public function setIncludeIssuerInfo($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Include Issuer Info must be a string.');

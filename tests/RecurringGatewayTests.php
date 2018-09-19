@@ -19,6 +19,23 @@ class RecurringGatewayTests extends GatewayTestCase
         $this->gateway->setTransactionKey('6n9B58NDe48qy7Es');
         $this->gateway->setTestMode(true);
 
+        $response = $this->gateway->getSubscription(
+            ['subscriptionId' => '5340991']
+        )->send();
+
+        var_dump($response->isSuccessful());
+        // bool(true)
+
+        var_dump($response->getCode());
+        // string(1) "1"
+
+        var_dump($response->getMessage());
+        // string(35) "This transaction has been approved."
+
+        var_dump($response->getTransactionReference());
+        // string(11) "60103474871"
+        
+
         //$this->createSubscription();
         //$this->getSubscription();
         //$this->cancelSubscription();
@@ -35,10 +52,12 @@ class RecurringGatewayTests extends GatewayTestCase
             'scheduleStartDate' => '2020-03-10',
             'scheduleTotalOccurrences' => '12',
             'scheduleTrialOccurrences' => '1',
+
             'amount' => '12.29',
             'trialAmount' => '0.00',
             'cardNumber' => '4111111111111111',
             'expirationDate' => '2020-12',
+            
             'billToFirstName' => 'Denis',
             'billToLastName' => 'Sidorov'
         );
@@ -53,11 +72,6 @@ class RecurringGatewayTests extends GatewayTestCase
 
     protected function cancelSubscription() {
         $response = $this->gateway->subscription(['subscriptionId' => '5340562'])->cancel();
-        var_dump($response);
-    }
-
-    protected function getCustomerInfo() {
-        $response = $this->gateway->customer(['customerProfileId' => '1505272217'])->get();
         var_dump($response);
     }
 

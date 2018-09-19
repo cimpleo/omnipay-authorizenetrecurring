@@ -2,11 +2,11 @@
 
 namespace Omnipay\AuthorizeNetRecurring\Requests;
 
-class CustomerRequest extends OmnipayRequest
+class GetCustomerRequest extends AbstractRequest
 {
-   
-    public function get() {
-        $parameters = array(
+
+    public function getData() {
+        return array(
             'getCustomerProfileRequest' => array(
                 'merchantAuthentication' => array(
                     'name' => $this->getAuthName(),
@@ -16,8 +16,6 @@ class CustomerRequest extends OmnipayRequest
                 'includeIssuerInfo' => $this->getIncludeIssuerInfo(),
             )
         );
-        return $this->sendRequest($parameters);
     }
-
 
 }
