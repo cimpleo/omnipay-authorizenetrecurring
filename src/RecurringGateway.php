@@ -13,24 +13,27 @@ use Omnipay\AuthorizeNetRecurring\Requests\GetSubscriptionStatusRequest;
 use Omnipay\AuthorizeNetRecurring\Requests\GetSubscriptionListRequest;
 use Omnipay\AuthorizeNetRecurring\Requests\GetCustomerRequest;
 
+use Omnipay\AuthorizeNetRecurring\Requests\TestRequest;
+
 class RecurringGateway extends AbstractGateway
 {
 
-    //Get Name of this API
+    // Get Name of this API
     public function getName() {
         return 'Authorize.net Recurring API';
+    }
+
+    // Test Request with transaction
+    public function test(array $parameters = []) {
+        return $this->createRequest(
+            TestRequest::class,
+            $parameters
+        );
     }
 
     public function createSubscription(array $parameters = []) {
         return $this->createRequest(
             CreateSubscriptionRequest::class,
-            $parameters
-        );
-    }
-
-    public function createSubscriptionFromProfile(array $parameters = []) {
-        return $this->createRequest(
-            CreateSubscriptionFromProfileRequest::class,
             $parameters
         );
     }

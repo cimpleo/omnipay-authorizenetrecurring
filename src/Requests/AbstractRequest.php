@@ -10,7 +10,7 @@ use Academe\AuthorizeNet\Request\CreateTransaction;
 use Academe\AuthorizeNet\Request\Transaction\VoidTransaction;
 
 use Academe\AuthorizeNet\Request\AbstractRequest as ApiAbstractRequest;
-use Omnipay\AuthorizeNetRecurring\GatewayParams;
+use Omnipay\AuthorizeNetRecurring\Traits\GatewayParams;
 
 abstract class AbstractRequest extends OmnipayAbstractRequest
 {
@@ -42,13 +42,6 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
             json_encode($data)
         );
         return $response;
-    }
-
-    // Create a void Transaction
-    protected function createTransaction() {
-        $refTransId = $this->getTransactionReference();
-        $transaction = new VoidTransaction($refTransId);
-        return $transaction;
     }
 
     // Send a transaction and return the decoded data.

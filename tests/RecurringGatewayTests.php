@@ -3,6 +3,18 @@
 namespace Omnipay\AuthorizeNetRecurring;
 
 use Omnipay\Tests\GatewayTestCase;
+use Omnipay\Common\Http\Client;
+use Omnipay\Common\CreditCard;
+
+use Academe\AuthorizeNet\Payment\BankAccount;
+use Academe\AuthorizeNet\Payment\OpaqueData;
+use Academe\AuthorizeNet\Request\Model\Order;
+
+use Omnipay\AuthorizeNetRecurring\Objects\Schedule;
+use Omnipay\AuthorizeNetRecurring\Objects\Customer;
+use Omnipay\AuthorizeNetRecurring\Objects\Bill;
+use Omnipay\AuthorizeNetRecurring\Objects\Ship;
+use Omnipay\AuthorizeNetRecurring\Objects\Search;
 
 class RecurringGatewayTests extends GatewayTestCase
 {
@@ -11,7 +23,7 @@ class RecurringGatewayTests extends GatewayTestCase
         parent::setUp();
 
         $this->gateway = new RecurringGateway(
-            $this->getHttpClient(),
+            new Client,
             $this->getHttpRequest()
         );
 
@@ -19,9 +31,55 @@ class RecurringGatewayTests extends GatewayTestCase
         $this->gateway->setTransactionKey('6n9B58NDe48qy7Es');
         $this->gateway->setTestMode(true);
 
-        $response = $this->gateway->getSubscription(
-            ['subscriptionId' => '5340991']
-        )->send();
+/*        $search = new Search([
+            'searchType' => 'subscriptionActive',
+            'orderBy' => 'id',
+            'orderDescending' => 'true',
+            'limit' => '100',
+            'offset' => '1',
+        ]);
+
+        $response = $this->gateway->getSubscriptionList([
+            'refId' => '1537181676',
+            'search' => $search
+        ])->send();
+
+        var_dump($response->getData());
+        die;*/
+
+        $schedule = new Schedule([
+            'intervalLength' => '10',
+            'intervalUnit' => 'days',
+            'startDate' => '2020-03-10',
+            'totalOccurrences' => '12',
+            'trialOccurrences' => '1',
+        ]);
+
+        $card = new CreditCard([
+            'number' => '4111111111111111',
+            'expiryMonth' => '12',
+            'expiryYear' => '2020',
+            'cvv' => '123',
+        ]);
+
+        $bill = new Bill([
+            'firstName' => 'Test',
+            'lastName' => 'Test'
+        ]);
+
+        $response = $this->gateway->createSubscription([
+            'subscriptionName' => 'Test Subscription',
+            'refId' => '123456',
+            'amount' => '7.99',
+            'trialAmount' => '0.00',
+            'currency' => 'USD',
+            'schedule' => $schedule,
+            'card' => $card,
+            'bill' => $bill,
+        ])->send();
+
+        var_dump($response->getData());
+        // Array
 
         var_dump($response->isSuccessful());
         // bool(true)
@@ -34,45 +92,7 @@ class RecurringGatewayTests extends GatewayTestCase
 
         var_dump($response->getTransactionReference());
         // string(11) "60103474871"
-        
-
-        //$this->createSubscription();
-        //$this->getSubscription();
-        //$this->cancelSubscription();
-
-        //$this->getCustomerInfo();
-    }
-
-    protected function createSubscription() {
-        $parameters = array(
-            'refId' => time().'',
-            'subscriptionName' => 'Test Subscription 3',
-            'scheduleIntervalLength' => '10',
-            'scheduleIntervalUnit' => 'days',
-            'scheduleStartDate' => '2020-03-10',
-            'scheduleTotalOccurrences' => '12',
-            'scheduleTrialOccurrences' => '1',
-
-            'amount' => '12.29',
-            'trialAmount' => '0.00',
-            'cardNumber' => '4111111111111111',
-            'expirationDate' => '2020-12',
-            
-            'billToFirstName' => 'Denis',
-            'billToLastName' => 'Sidorov'
-        );
-        $response = $this->gateway->subscription($parameters)->create();
-        var_dump($response);
-    }
-
-    protected function getSubscription() {
-        $response = $this->gateway->subscription(['subscriptionId' => '5340991'])->get();
-        var_dump($response);
-    }
-
-    protected function cancelSubscription() {
-        $response = $this->gateway->subscription(['subscriptionId' => '5340562'])->cancel();
-        var_dump($response);
+        die;
     }
 
     protected function tearDown() {
@@ -162,4 +182,33 @@ array(4) {
     }
   }
 }
+array(4) {
+    ["subscriptionId"]=>
+    string(7) "5345233"
+    ["profile"]=>
+    array(2) {
+      ["customerProfileId"]=>
+      string(10) "1505288440"
+      ["customerPaymentProfileId"]=>
+      string(10) "1504568429"
+    }
+    ["refId"]=>
+    string(0) ""
+    ["messages"]=>
+    array(2) {
+      ["resultCode"]=>
+      string(2) "Ok"
+      ["message"]=>
+      array(1) {
+        [0]=>
+        array(2) {
+          ["code"]=>
+          string(6) "I00001"
+          ["text"]=>
+          string(11) "Successful."
+        }
+      }
+    }
+  }
+
 */

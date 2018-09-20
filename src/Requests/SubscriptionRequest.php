@@ -2,146 +2,55 @@
 
 namespace Omnipay\AuthorizeNetRecurring\Requests;
 
-class SubscriptionRequest extends AbstractRequest
+abstract class SubscriptionRequest extends AbstractRequest
 {
 
-    private function createSubscriptionArray() {
+    public function createSubscriptionArray() {
         $subscription = array();
-        //Name of Subscription
+        // Name of Subscription
         if ($this->getSubscriptionName()) {
             $subscription['name'] = $this->getSubscriptionName();
         }
-        //Payment Schedule
-        if ($this->getScheduleIntervalLength()) {
-            $subscription['paymentSchedule']['interval']['length'] = $this->getScheduleIntervalLength();
+        if (is_object($this->getSchedule())) {
+            $subscription['paymentSchedule'] = $this->getSchedule()->jsonSerialize();
         }
-        if ($this->getScheduleIntervalUnit()) {
-            $subscription['paymentSchedule']['interval']['unit'] = $this->getScheduleIntervalUnit();
-        }
-        if ($this->getScheduleStartDate()) {
-            $subscription['paymentSchedule']['startDate'] = $this->getScheduleStartDate();
-        }
-        if ($this->getScheduleTotalOccurrences()) {
-            $subscription['paymentSchedule']['totalOccurrences'] = $this->getScheduleTotalOccurrences();
-        }
-        if ($this->getScheduleTrialOccurrences()) {
-            $subscription['paymentSchedule']['trialOccurrences'] = $this->getScheduleTrialOccurrences();
-        }
-        //Amount
+        // Amount
         if ($this->getAmount()) {
             $subscription['amount'] = $this->getAmount();
         }
         if ($this->getTrialAmount()) {
             $subscription['trialAmount'] = $this->getTrialAmount();
         }
-        //Payment - Credit Card
-        if ($this->getCardNumber()) {
-            $subscription['payment']['creditCard']['cardNumber'] = $this->getCardNumber();
+        // Credit Card fields
+        if (is_object($this->getCard())) {
+            $this->getCard()->validate();
+            $subscription['payment']['creditCard']['cardNumber'] = $this->getCard()->getNumber();
+            $subscription['payment']['creditCard']['expirationDate'] = $this->getCard()->getExpiryYear().'-'.$this->getCard()->getExpiryMonth();
+            $subscription['payment']['creditCard']['cardCode'] = $this->getCard()->getCvv();
         }
-        if ($this->getExpirationDate()) {
-            $subscription['payment']['creditCard']['expirationDate'] = $this->getExpirationDate();
+        // Bank Account fields
+        if (is_object($this->getBankAccount())) {
+            $subscription['bankAccount'] = $this->getBankAccount()->jsonSerialize();
         }
-        if ($this->getCardCode()) {
-            $subscription['payment']['creditCard']['cardCode'] = $this->getCardCode();
+        // Opaque Data fields
+        if (is_object($this->getOpaqueData())) {
+            $subscription['opaqueData'] = $this->getOpaqueData()->jsonSerialize();
         }
-        //Payment - Bank Account
-        if ($this->getBankAccountType()) {
-            $subscription['payment']['bankAccount']['accountType'] = $this->getBankAccountType();
+        // Order fields
+        if (is_object($this->getOrder())) {
+            $subscription['order'] = $this->getOrder()->jsonSerialize();
         }
-        if ($this->getBankRoutingNumber()) {
-            $subscription['payment']['bankAccount']['routingNumber'] = $this->getBankRoutingNumber();
+        // Customer fields
+        if (is_object($this->getCustomer())) {
+            $subscription['customer'] = $this->getCustomer()->jsonSerialize();
         }
-        if ($this->getBankAccountNumber()) {
-            $subscription['payment']['bankAccount']['accountNumber'] = $this->getBankAccountNumber();
+        // Bill To fields
+        if (is_object($this->getBill())) {
+            $subscription['billTo'] = $this->getBill()->jsonSerialize();
         }
-        if ($this->getBankNameOnAccount()) {
-            $subscription['payment']['bankAccount']['nameOnAccount'] = $this->getBankNameOnAccount();
-        }
-        if ($this->getBankEcheckType()) {
-            $subscription['payment']['bankAccount']['echeckType'] = $this->getBankEcheckType();
-        }
-        if ($this->getBankName()) {
-            $subscription['payment']['bankAccount']['bankName'] = $this->getBankName();
-        }
-        //Payment - Opaque Data
-        if ($this->getOpaqueDataDescriptor()) {
-            $subscription['payment']['opaqueData']['dataDescriptor'] = $this->getOpaqueDataDescriptor();
-        }
-        if ($this->getOpaqueDataValue()) {
-            $subscription['payment']['opaqueData']['dataValue'] = $this->getOpaqueDataValue();
-        }
-        //Order
-        if ($this->getOrderInvoiceNumber()) {
-            $subscription['order']['invoiceNumber'] = $this->getOrderInvoiceNumber();
-        }
-        if ($this->getOrderDescription()) {
-            $subscription['order']['description'] = $this->getOrderDescription();
-        }
-        //Customer
-        if ($this->getCustomerType()) {
-            $subscription['customer']['type'] = $this->getCustomerType();
-        }
-        if ($this->getCustomerId()) {
-            $subscription['customer']['id'] = $this->getCustomerId();
-        }
-        if ($this->getCustomerEmail()) {
-            $subscription['customer']['email'] = $this->getCustomerEmail();
-        }
-        if ($this->getCustomerPhoneNumber()) {
-            $subscription['customer']['phoneNumber'] = $this->getCustomerPhoneNumber();
-        }
-        if ($this->getCustomerFaxNumber()) {
-            $subscription['customer']['faxNumber'] = $this->getCustomerFaxNumber();
-        }
-        //Bill To
-        if ($this->getBillToFirstName()) {
-            $subscription['billTo']['firstName'] = $this->getBillToFirstName();
-        }
-        if ($this->getBillToLastName()) {
-            $subscription['billTo']['lastName'] = $this->getBillToLastName();
-        }
-        if ($this->getBillToCompany()) {
-            $subscription['billTo']['company'] = $this->getBillToCompany();
-        }
-        if ($this->getBillToAddress()) {
-            $subscription['billTo']['address'] = $this->getBillToAddress();
-        }
-        if ($this->getBillToCity()) {
-            $subscription['billTo']['city'] = $this->getBillToCity();
-        }
-        if ($this->getBillToState()) {
-            $subscription['billTo']['state'] = $this->getBillToState();
-        }
-        if ($this->getBillToZip()) {
-            $subscription['billTo']['zip'] = $this->getBillToZip();
-        }
-        if ($this->getBillToCountry()) {
-            $subscription['billTo']['country'] = $this->getBillToCountry();
-        }
-        //Ship To
-        if ($this->getShipToFirstName()) {
-            $subscription['shipTo']['firstName'] = $this->getShipToFirstName();
-        }
-        if ($this->getShipToLastName()) {
-            $subscription['shipTo']['lastName'] = $this->getShipToLastName();
-        }
-        if ($this->getShipToCompany()) {
-            $subscription['shipTo']['company'] = $this->getShipToCompany();
-        }
-        if ($this->getShipToAddress()) {
-            $subscription['shipTo']['address'] = $this->getShipToAddress();
-        }
-        if ($this->getShipToCity()) {
-            $subscription['shipTo']['city'] = $this->getShipToCity();
-        }
-        if ($this->getShipToState()) {
-            $subscription['shipTo']['state'] = $this->getShipToState();
-        }
-        if ($this->getShipToZip()) {
-            $subscription['shipTo']['zip'] = $this->getShipToZip();
-        }
-        if ($this->getShipToCountry()) {
-            $subscription['shipTo']['country'] = $this->getShipToCountry();
+        // Ship To fields
+        if (is_object($this->getShip())) {
+            $subscription['shipTo'] = $this->getShip()->jsonSerialize();
         }
         return $subscription;
     }
