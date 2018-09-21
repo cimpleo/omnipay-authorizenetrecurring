@@ -5,7 +5,6 @@ namespace Omnipay\AuthorizeNetRecurring;
 use Omnipay\Common\Exception\InvalidRequestException;
 
 use Omnipay\AuthorizeNetRecurring\Requests\CreateSubscriptionRequest;
-use Omnipay\AuthorizeNetRecurring\Requests\CreateSubscriptionFromProfileRequest;
 use Omnipay\AuthorizeNetRecurring\Requests\UpdateSubscriptionRequest;
 use Omnipay\AuthorizeNetRecurring\Requests\CancelSubscriptionRequest;
 use Omnipay\AuthorizeNetRecurring\Requests\GetSubscriptionRequest;
@@ -13,22 +12,12 @@ use Omnipay\AuthorizeNetRecurring\Requests\GetSubscriptionStatusRequest;
 use Omnipay\AuthorizeNetRecurring\Requests\GetSubscriptionListRequest;
 use Omnipay\AuthorizeNetRecurring\Requests\GetCustomerRequest;
 
-use Omnipay\AuthorizeNetRecurring\Requests\TestRequest;
-
 class RecurringGateway extends AbstractGateway
 {
 
     // Get Name of this API
     public function getName() {
         return 'Authorize.net Recurring API';
-    }
-
-    // Test Request with transaction
-    public function test(array $parameters = []) {
-        return $this->createRequest(
-            TestRequest::class,
-            $parameters
-        );
     }
 
     public function createSubscription(array $parameters = []) {

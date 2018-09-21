@@ -17,9 +17,6 @@ abstract class AbstractResponse extends OmnipayAbstractResponse
     protected $parsedData;
     protected $accessor;
 
-    // The property the transaction can be found in
-    protected $transactionIndex = 'transactionResponse';
-
     // Omnipay Common has some data to record. Parse the raw data into a response message value object.
     public function __construct(RequestInterface $request, $data) {
         parent::__construct($request, $data);
@@ -65,14 +62,9 @@ abstract class AbstractResponse extends OmnipayAbstractResponse
         return $this->parsedData;
     }
 
-    // The merchant supplied ID. Up to 20 characters. aka transactionId.
+    // The merchant supplied ID. Up to 20 characters.
     public function getRefId() {
         return $this->getValue('refId');
-    }
-
-    // The transactionId is returned only if sent in the request.
-    public function getTransactionId() {
-        return $this->getRefId();
     }
 
     // Get the first top-level result code.
@@ -85,7 +77,7 @@ abstract class AbstractResponse extends OmnipayAbstractResponse
         return $this->getValue('messages.first.text');
     }
 
-    // Get the transaction message text from the response envelope. Inheriting responses will normally refine this to look deeper into the response body.
+    // Get the message text from the response envelope. Inheriting responses will normally refine this to look deeper into the response body.
     public function getMessage() {
         return $this->getResponseMessage();
     }
@@ -105,36 +97,9 @@ abstract class AbstractResponse extends OmnipayAbstractResponse
         return $this->getValue('messages');
     }
 
-    // Tell us whether the response was successful overall. This is just about the response as a whole; the response may still represent a failed transaction.
-    public function responseIsSuccessful() {
-        return $this->getResultCode() === Response::RESULT_CODE_OK;
-    }
-
     // Return true or false.
     public function isSuccessful() {
         return $this->getResultCode() === Response::RESULT_CODE_OK;
-    }
-
-    // Return the last four digits of the crddit card used, if availale.
-    public function getNumberLastFour() {
-        return substr($this->getValue($this->transactionIndex . '.accountNumber'), -4, 4) ?: null;
-    }
-
-    // Return the text of the first error or message in the transaction response.
-    public function getTransactionMessage() {
-        return $this->getValue($this->transactionIndex . '.errors.first.text')
-            ?: $this->getValue($this->transactionIndex . '.transactionMessages.first.text');
-    }
-
-    // Return the code of the first error or message in the transaction response.
-    public function getTransactionCode() {
-        return $this->getValue($this->transactionIndex . '.errors.first.code')
-            ?: $this->getValue($this->transactionIndex . '.transactionMessages.first.code');
-    }
-
-    // ID created for the transaction by the remote gateway.
-    public function getTransactionReference() {
-        return $this->getValue($this->transactionIndex . '.transId');
     }
 
 }

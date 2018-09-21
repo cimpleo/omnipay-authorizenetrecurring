@@ -44,13 +44,25 @@ abstract class SubscriptionRequest extends AbstractRequest
         if (is_object($this->getCustomer())) {
             $subscription['customer'] = $this->getCustomer()->jsonSerialize();
         }
-        // Bill To fields
-        if (is_object($this->getBill())) {
-            $subscription['billTo'] = $this->getBill()->jsonSerialize();
-        }
-        // Ship To fields
-        if (is_object($this->getShip())) {
-            $subscription['shipTo'] = $this->getShip()->jsonSerialize();
+        // Bill To and Ship To fields
+        if (is_object($this->getCard())) {
+            $subscription['billTo']['firstName'] = $this->getCard()->getBillingFirstName();
+            $subscription['billTo']['lastName'] = $this->getCard()->getBillingLastName();
+            $subscription['billTo']['company'] = $this->getCard()->getBillingCompany();
+            $subscription['billTo']['address'] = trim($this->getCard()->getBillingAddress1().' '.$this->getCard()->getBillingAddress2());
+            $subscription['billTo']['city'] = $this->getCard()->getBillingCity();
+            $subscription['billTo']['state'] = $this->getCard()->getBillingState();
+            $subscription['billTo']['zip'] = $this->getCard()->getBillingPostcode();
+            $subscription['billTo']['country'] = $this->getCard()->getBillingCountry();
+            // Ship To fields
+            $subscription['shipTo']['firstName'] = $this->getCard()->getShippingFirstName();
+            $subscription['shipTo']['lastName'] = $this->getCard()->getShippingLastName();
+            $subscription['shipTo']['company'] = $this->getCard()->getShippingCompany();
+            $subscription['shipTo']['address'] = trim($this->getCard()->getBillingAddress1().' '.$this->getCard()->getBillingAddress2());
+            $subscription['shipTo']['city'] = $this->getCard()->getShippingCity();
+            $subscription['shipTo']['state'] = $this->getCard()->getShippingState();
+            $subscription['shipTo']['zip'] = $this->getCard()->getShippingPostcode();
+            $subscription['shipTo']['country'] = $this->getCard()->getShippingCountry();
         }
         return $subscription;
     }

@@ -14,14 +14,4 @@ class Response extends AbstractResponse
         parent::__construct($request, $data);
     }
 
-    //Return the message code from the transaction if available, or the response envelope.
-    public function getCode() {
-        return $this->getTransactionCode() ?: parent::getCode();
-    }
-
-    //Get the transaction message text if available, falling back to the response envelope.
-    public function getMessage() {
-        return $this->getTransactionMessage() ?: parent::getMessage();
-    }
-
 }

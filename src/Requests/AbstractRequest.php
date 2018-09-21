@@ -3,13 +3,6 @@
 namespace Omnipay\AuthorizeNetRecurring\Requests;
 
 use Omnipay\Common\Message\AbstractRequest as OmnipayAbstractRequest;
-
-use Academe\AuthorizeNet\Auth\MerchantAuthentication;
-use Academe\AuthorizeNet\TransactionRequestInterface;
-use Academe\AuthorizeNet\Request\CreateTransaction;
-use Academe\AuthorizeNet\Request\Transaction\VoidTransaction;
-
-use Academe\AuthorizeNet\Request\AbstractRequest as ApiAbstractRequest;
 use Omnipay\AuthorizeNetRecurring\Traits\GatewayParams;
 
 abstract class AbstractRequest extends OmnipayAbstractRequest
@@ -18,11 +11,6 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
 
     protected $endpointSandbox = 'https://apitest.authorize.net/xml/v1/request.api';
     protected $endpointLive = 'https://api.authorize.net/xml/v1/request.api';
-
-    // Get the authentication credentials object.
-    public function getAuth() {
-        return new MerchantAuthentication($this->getAuthName(), $this->getTransactionKey());
-    }
 
     // Return the relevant endpoint.
     public function getEndpoint() {
@@ -44,28 +32,7 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
         return $response;
     }
 
-    // Send a transaction and return the decoded data.
-    protected function sendTransaction(TransactionRequestInterface $transaction) {
-        $request = $this->wrapTransaction($this->getAuth(), $transaction);
-        $request = $request->withRefId($this->getTransactionId());
-        return $this->sendMessage($request);
-    }
-
-    // Wrap the transaction detail into a full request for an action on the transaction.
-    protected function wrapTransaction($auth, $transaction) {
-        return new CreateTransaction($auth, $transaction);
-    }
-
     // Send the request to the gateway.
-    protected function sendMessage(ApiAbstractRequest $message) {
-        $response = $this->sendRequest($message);
-        $body = (string)($response->getBody());
-        $body = $this->removeBOM($body);
-        $data = json_decode($body, true);
-        return $data;
-    }
-
-    // Send the request to the gateway without transaction.
     public function sendData($data) {
         $response = $this->sendRequest($data);
         $body = (string)($response->getBody());

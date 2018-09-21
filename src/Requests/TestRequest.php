@@ -2,7 +2,7 @@
 
 namespace Omnipay\AuthorizeNetRecurring\Requests;
 
-use Academe\AuthorizeNet\Request\Transaction\AuthOnly;
+use Omnipay\AuthorizeNetRecurring\Transactions\CreateSubscriptionTransaction;
 use Academe\AuthorizeNet\Amount\MoneyPhp;
 use Academe\AuthorizeNet\Amount\Amount;
 use Academe\AuthorizeNet\Request\Model\NameAddress;
@@ -18,20 +18,22 @@ use Academe\AuthorizeNet\Request\Collections\LineItems;
 use Academe\AuthorizeNet\Request\Model\LineItem;
 use Academe\AuthorizeNet\Request\Model\CardholderAuthentication;
 
-use Money\Parser\DecimalMoneyParser;
-use Money\Currencies\ISOCurrencies;
-use Money\Money;
-use Money\Currency;
+use Omnipay\AuthorizeNetRecurring\Requests\SubscriptionRequest;
 
-class TestRequest extends AbstractRequest
+class TestRequest extends SubscriptionRequest
 {
-
-    const CARD_TOKEN_SEPARATOR = ':';
 
     public function getData() {
         $amount = new Amount($this->getCurrency(), $this->getAmountInteger());
 
-        $transaction = $this->createTransaction($amount);
+
+        $transaction = $this->createTransaction([
+            'refId' => $this->getRefId(),
+            'subscription' => $this->createSubscriptionArray()
+        ]);
+        return $transaction;
+        var_dump($transaction);
+        die;
 
         if ($card = $this->getCard()) {
             $billTo = new NameAddress(
@@ -112,35 +114,17 @@ class TestRequest extends AbstractRequest
 
         $descriptor = $this->getOpaqueDataDescriptor();
         $value = $this->getOpaqueDataValue();
-
         if ($descriptor && $value) {
             $transaction = $transaction->withPayment(
                 new OpaqueData($descriptor, $value)
             );
         }
-
-        if ($this->getClientIp()) {
-            $transaction = $transaction->withCustomerIp($this->getClientIp());
-        }
-
-        // The MarketType and DeviceType is mandatory if tracks are supplied.
-        if ($this->getDeviceType() || $this->getMarketType() || (isset($card) && $card->getTracks())) {
-            // TODO: accept optional customerSignature
-            $retail = new Retail(
-                $this->getMarketType() ?: Retail::MARKET_TYPE_RETAIL,
-                $this->getDeviceType() ?: Retail::DEVICE_TYPE_UNKNOWN
-            );
-
-            $transaction = $transaction->withRetail($retail);
-        }
-
         // The description and invoice number go into an Order object.
         if ($this->getInvoiceNumber() || $this->getDescription()) {
             $order = new Order(
                 $this->getInvoiceNumber(),
                 $this->getDescription()
             );
-
             $transaction = $transaction->withOrder($order);
         }
 
@@ -157,52 +141,13 @@ class TestRequest extends AbstractRequest
             $transaction = $transaction->withCardholderAuthentication($cardholderAuthentication);
         }
 
-        // Is a basket of items to go into the request?
-        if ($this->getItems()) {
-            $lineItems = new LineItems();
-
-            $currencies = new ISOCurrencies();
-            $moneyParser = new DecimalMoneyParser($currencies);
-
-            foreach ($this->getItems() as $itemId => $item) {
-                // Parse to a Money object.
-                $itemMoney = $moneyParser->parse((string)$item->getPrice(), $this->getCurrency());
-
-                // Omnipay provides the line price, but the LineItem wants the unit price.
-                $itemQuantity = $item->getQuantity();
-
-                if (! empty($itemQuantity)) {
-                    // Divide the line price by the quantity to get the item price.
-                    $itemMoney = $itemMoney->divide($itemQuantity);
-                }
-
-                // Wrap in a MoneyPhp object for the AmountInterface.
-                $amount = new MoneyPhp($itemMoney);
-
-                $lineItem = new LineItem(
-                    $itemId,
-                    $item->getName(),
-                    $item->getDescription(),
-                    $itemQuantity,
-                    $amount, // AmountInterface (unit price)
-                    null // $taxable
-                );
-
-                $lineItems->push($lineItem);
-            }
-
-            if ($lineItems->count()) {
-                $transaction = $transaction->withLineItems($lineItems);
-            }
-        }
-        $transaction = $transaction->with([
-            'terminalNumber' => $this->getTerminalNumber(),
-        ]);
+        var_dump($transaction);
+        die;
         return $transaction;
     }
 
-    protected function createTransaction(AmountInterface $amount) {
-        return new AuthOnly($amount);
+    protected function createTransaction($parameters) {
+        return new CreateSubscriptionTransaction($parameters);
     }
 
     public function sendData($data) {
@@ -234,22 +179,6 @@ class TestRequest extends AbstractRequest
         return $this->getParameter('authenticationValue');
     }
 
-    public function setDeviceType($value) {
-        return $this->setParameter('deviceType', $value);
-    }
-
-    public function getDeviceType() {
-        return $this->getParameter('deviceType');
-    }
-
-    public function setMarketType($value) {
-        return $this->setParameter('marketType', $value);
-    }
-
-    public function getMarketType() {
-        return $this->getParameter('marketType');
-    }
-
     public function setOpaqueDataDescriptor($value) {
         return $this->setParameter('opaqueDataDescriptor', $value);
     }
@@ -264,14 +193,6 @@ class TestRequest extends AbstractRequest
 
     public function getOpaqueDataValue() {
         return $this->getParameter('opaqueDataValue');
-    }
-
-    public function setTerminalNumber($value) {
-        return $this->setParameter('terminalNumber', $value);
-    }
-
-    public function getTerminalNumber() {
-        return $this->getParameter('terminalNumber');
     }
 
     public function setOpaqueDatas($descriptor, $value) {
