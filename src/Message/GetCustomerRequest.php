@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNetRecurring\Requests;
+namespace Omnipay\AuthorizeNetRecurring\Message;
 
 class GetCustomerRequest extends AbstractRequest
 {

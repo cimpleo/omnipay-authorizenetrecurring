@@ -1,5 +1,5 @@
 {
-    "name": "cimpleo-sandbox/laravel-authorize",
+    "name": "authomnipay",
     "type": "library",
     "description": "Authorize.Net recurring payment processing library for the Omnipay 3.x and Laravel 5",
     "keywords": [

@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNetRecurring\Requests;
+namespace Omnipay\AuthorizeNetRecurring\Message;
 
 use Omnipay\Common\Message\AbstractResponse as OmnipayAbstractResponse;
 use Omnipay\Common\Message\RequestInterface;

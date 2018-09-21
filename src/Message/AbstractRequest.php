@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNetRecurring\Requests;
+namespace Omnipay\AuthorizeNetRecurring\Message;
 
 use Omnipay\Common\Message\AbstractRequest as OmnipayAbstractRequest;
 use Omnipay\AuthorizeNetRecurring\Traits\GatewayParams;

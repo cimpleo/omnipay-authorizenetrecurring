@@ -4,13 +4,13 @@ namespace Omnipay\AuthorizeNetRecurring;
 
 use Omnipay\Common\Exception\InvalidRequestException;
 
-use Omnipay\AuthorizeNetRecurring\Requests\CreateSubscriptionRequest;
-use Omnipay\AuthorizeNetRecurring\Requests\UpdateSubscriptionRequest;
-use Omnipay\AuthorizeNetRecurring\Requests\CancelSubscriptionRequest;
-use Omnipay\AuthorizeNetRecurring\Requests\GetSubscriptionRequest;
-use Omnipay\AuthorizeNetRecurring\Requests\GetSubscriptionStatusRequest;
-use Omnipay\AuthorizeNetRecurring\Requests\GetSubscriptionListRequest;
-use Omnipay\AuthorizeNetRecurring\Requests\GetCustomerRequest;
+use Omnipay\AuthorizeNetRecurring\Message\CreateSubscriptionRequest;
+use Omnipay\AuthorizeNetRecurring\Message\UpdateSubscriptionRequest;
+use Omnipay\AuthorizeNetRecurring\Message\CancelSubscriptionRequest;
+use Omnipay\AuthorizeNetRecurring\Message\GetSubscriptionRequest;
+use Omnipay\AuthorizeNetRecurring\Message\GetSubscriptionStatusRequest;
+use Omnipay\AuthorizeNetRecurring\Message\GetSubscriptionListRequest;
+use Omnipay\AuthorizeNetRecurring\Message\GetCustomerRequest;
 
 class RecurringGateway extends AbstractGateway
 {

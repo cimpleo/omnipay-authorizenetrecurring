@@ -78,6 +78,17 @@ trait GatewayParams
         return $this->getParameter('customer');
     }
 
+    // Profile
+    public function setProfile($value) {
+        if ($value != null && !is_object($value)) {
+            throw new InvalidRequestException('Profile must be an object.');
+        }
+        return $this->setParameter('profile', $value);
+    }
+    public function getProfile() {
+        return $this->getParameter('profile');
+    }
+
     // Bank Account
     public function setBankAccount($value) {
         if ($value != null && !is_object($value)) {

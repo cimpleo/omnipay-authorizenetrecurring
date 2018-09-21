@@ -1,20 +1,23 @@
 <?php
 
-namespace Omnipay\AuthorizeNetRecurring\Requests;
+namespace Omnipay\AuthorizeNetRecurring\Message;
 
-class GetSubscriptionStatusRequest extends AbstractRequest
+class UpdateSubscriptionRequest extends SubscriptionRequest
 {
 
     public function getData() {
+        $subscription = $this->createSubscriptionArray();
         return array(
-            'ARBGetSubscriptionStatusRequest' => array(
+            'ARBCreateSubscriptionRequest' => array(
                 'merchantAuthentication' => array(
                     'name' => $this->getAuthName(),
                     'transactionKey' => $this->getTransactionKey()
                 ),
+                'refId' => $this->getRefId(),
                 'subscriptionId' => $this->getSubscriptionId(),
+                'subscription' => $subscription
             )
-        );
+        );   
     }
 
 }

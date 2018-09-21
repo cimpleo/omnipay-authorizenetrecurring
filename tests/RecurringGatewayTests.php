@@ -14,7 +14,6 @@ class RecurringGatewayTests extends GatewayTestCase
             $this->getHttpClient(),
             $this->getHttpRequest()
         );
-
     }
 
     protected function tearDown() {

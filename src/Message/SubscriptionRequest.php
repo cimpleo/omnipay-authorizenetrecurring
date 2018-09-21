@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNetRecurring\Requests;
+namespace Omnipay\AuthorizeNetRecurring\Message;
 
 abstract class SubscriptionRequest extends AbstractRequest
 {
@@ -43,6 +43,10 @@ abstract class SubscriptionRequest extends AbstractRequest
         // Customer fields
         if (is_object($this->getCustomer())) {
             $subscription['customer'] = $this->getCustomer()->jsonSerialize();
+        }
+        // Profile fields
+        if (is_object($this->getProfile())) {
+            $subscription['profile'] = $this->getProfile()->jsonSerialize();
         }
         // Bill To and Ship To fields
         if (is_object($this->getCard())) {

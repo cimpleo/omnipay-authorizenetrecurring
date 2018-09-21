@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNetRecurring\Requests;
+namespace Omnipay\AuthorizeNetRecurring\Message;
 
 use Academe\AuthorizeNet\Response\Collections\TransactionMessages;
 use Academe\AuthorizeNet\Response\Collections\Errors;

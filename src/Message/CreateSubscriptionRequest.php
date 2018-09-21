@@ -1,8 +1,8 @@
 <?php
 
-namespace Omnipay\AuthorizeNetRecurring\Requests;
+namespace Omnipay\AuthorizeNetRecurring\Message;
 
-class UpdateSubscriptionRequest extends SubscriptionRequest
+class CreateSubscriptionRequest extends SubscriptionRequest
 {
 
     public function getData() {
@@ -14,10 +14,9 @@ class UpdateSubscriptionRequest extends SubscriptionRequest
                     'transactionKey' => $this->getTransactionKey()
                 ),
                 'refId' => $this->getRefId(),
-                'subscriptionId' => $this->getSubscriptionId(),
                 'subscription' => $subscription
             )
-        );   
+        );
     }
 
 }

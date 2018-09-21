@@ -1,19 +1,18 @@
 <?php
 
-namespace Omnipay\AuthorizeNetRecurring\Requests;
+namespace Omnipay\AuthorizeNetRecurring\Message;
 
-class GetSubscriptionRequest extends AbstractRequest
+class CancelSubscriptionRequest extends AbstractRequest
 {
 
     public function getData() {
         return array(
-            'ARBGetSubscriptionRequest' => array(
+            'ARBCancelSubscriptionRequest' => array(
                 'merchantAuthentication' => array(
                     'name' => $this->getAuthName(),
                     'transactionKey' => $this->getTransactionKey()
                 ),
                 'subscriptionId' => $this->getSubscriptionId(),
-                'includeTransactions' => $this->getIncludeTransactions()
             )
         );
     }
