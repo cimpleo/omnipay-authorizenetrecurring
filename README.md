@@ -214,7 +214,7 @@ $response = $gateway->cancelSubscription([
     // Required. The payment gateway-assigned identification number for the subscription.
     'subscriptionId' => '100748',
     // If included in the request, this value is included in the response.
-    'refId': '123456'
+    'refId' => '123456'
 ])->send();
 
 var_dump($response->getData());
@@ -248,7 +248,7 @@ $response = $gateway->getSubscription([
     // Required. The payment gateway-assigned identification number for the subscription.
     'subscriptionId' => '100748',
     // If included in the request, this value is included in the response.
-    'refId': '123456',
+    'refId' => '123456',
     // Indicates whether to include information about transactions for this subscription.
     // If set to true, information about the most recent 20 transactions for this subscription will be included in the response.
     'includeTransactions': 'true'
@@ -285,7 +285,7 @@ $response = $gateway->getSubscriptionStatus([
     // Required. The payment gateway-assigned identification number for the subscription.
     'subscriptionId' => '100748',
     // If included in the request, this value is included in the response.
-    'refId': '123456'
+    'refId' => '123456'
 ])->send();
 
 var_dump($response->getData());
@@ -319,21 +319,21 @@ $gateway->setTestMode(true);
 $search = new Search([
     // Valid Values:
     // 'cardExpiringThisMonth', 'subscriptionActive', 'subscriptionInactive', or 'subscriptionExpiringThisMonth'
-    'searchType': 'subscriptionActive',
+    'searchType' => 'subscriptionActive',
     // One of the following: 'id', 'name', 'status' 'createTimeStampUTC' 'lastName' 'firstName' 'accountNumber' (ordered by last four digits) 'amount' or 'pastOccurences'
-    'orderBy': 'id',
+    'orderBy' => 'id',
     // Sort the results in descending order. Valid values 'true' or 'false'
-    'orderDescending': 'true',
+    'orderDescending' => 'true',
     // The number of transactions per page. You can request up to 1000 subscriptions per page of results.
-    'limit': '1000',
+    'limit' => '1000',
     // The number of the page to return results from. For example, if you use a limit of 100, setting offset to 1 will return the first 100 subscriptions, setting offset to 2 will return the second 100 subscriptions, and so forth.
-    'offset': '1'
+    'offset' => '1'
 ]);
 
 $response = $gateway->getSubscriptionList([
     // If included in the request, this value is included in the response.
-    'refId': '123456',
-    'search': $search
+    'refId' => '123456',
+    'search' => $search
 ])->send();
 
 var_dump($response->getData());
