@@ -23,7 +23,13 @@ abstract class AbstractResponse extends OmnipayAbstractResponse
         $this->setParsedData(new Response($data));
     }
 
-    // Get a value from the parsed data, based on a path. e.g. 'object.arrayProperty[0].stringProperty'. Returns null if the dependency path is broken at any point.
+    /**
+     * Get a value from the parsed data, based on a path.
+     * e.g. 'object.arrayProperty[0].stringProperty'.
+     * Returns null if the dependency path is broken at any point.
+     * @link http://symfony.com/doc/current/components/property_access.html
+     * @author academe/omnipay-authorizenetapi
+     */
     public function getValue($path) {
         $accessor = $this->getAccessor();
         // If the accessor has not already been set, then create the default accessor now.

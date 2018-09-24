@@ -3,11 +3,17 @@
 namespace Omnipay\AuthorizeNetRecurring\Objects;
 
 use Academe\AuthorizeNet\Request\Model\Customer as AuththorizeNetCustomer;
-use Omnipay\Common\Exception\InvalidRequestException;
+use Academe\AuthorizeNet\AbstractModel;
 
-class Customer extends AuththorizeNetCustomer
+class Customer extends AbstractModel
 {
+    
+    const CUSTOMER_TYPE_INDIVIDUAL = 'individual';
+    const CUSTOMER_TYPE_BUSINESS = 'business';
 
+    protected $customerType;
+    protected $id;
+    protected $email;
     protected $phoneNumber;
     protected $faxNumber;
 
@@ -21,34 +27,50 @@ class Customer extends AuththorizeNetCustomer
     }
 
     public function jsonSerialize() {
-        $data = [
-            'type' => $this->getCustomerType(),
-            'id' => $this->getId(),
-            'email' => $this->getEmail(),
-            'phoneNumber' => $this->getPhoneNumber(),
-            'faxNumber' => $this->getFaxNumber()
-        ];
+        $data = [];
+
+        if ($this->hasCustomerType()) {
+            $data['type'] = $this->getCustomerType();
+        }
+
+        if ($this->hasId()) {
+            $data['id'] = $this->getId();
+        }
+
+        if ($this->hasEmail()) {
+            $data['email'] = $this->getEmail();
+        }
+
+        if ($this->getPhoneNumber()) {
+            $data['phoneNumber'] = $this->getPhoneNumber();
+        }
+
+        if ($this->getFaxNumber()) {
+            $data['faxNumber'] = $this->getFaxNumber();
+        }
+
         return $data;
     }
 
-    protected function setPhoneNumber($value) {
-        if (!is_string($value)) {
-            throw new InvalidRequestException('Phone Number must be a string.');
-        }
-        $this->phoneNumber = $value;
+    protected function setCustomerType($value) {
+        $this->assertValueCustomerType($value);
+        $this->customerType = $value;
     }
-    protected function getPhoneNumber() {
-        return $this->phoneNumber;
+
+    protected function setId($value) {
+        $this->id = $value;
+    }
+
+    protected function setEmail($value) {
+        $this->email = $value;
+    }
+
+    protected function setPhoneNumber($value) {
+        $this->phoneNumber = $value;
     }
 
     protected function setFaxNumber($value) {
-        if (!is_string($value)) {
-            throw new InvalidRequestException('Fax Number must be a string.');
-        }
         $this->faxNumber = $value;
-    }
-    protected function getFaxNumber() {
-        return $this->faxNumber;
     }
 
 }

@@ -1,14 +1,15 @@
 {
-    "name": "authomnipay",
+    "name": "cimpleo/omnipay-authorizenetrecurring",
     "type": "library",
-    "description": "Authorize.Net recurring payment processing library for the Omnipay 3.x and Laravel 5.5",
+    "description": "Authorize.Net processing library for the Omnipay 3.x which work just with Recurring Billing. Recurring Billing methods enable you to manage regular payment subscriptions in Authorize.Net Payment Gateway.",
     "keywords": [
         "authorize.net",
         "gateway",
         "recurring",
+        "billing",
         "merchant",
+        "subscriptions",
         "omnipay",
-        "laravel",
         "payment"
     ],
     "homepage": "https://gitlab.com/cimpleo-sandbox/laravel-authorize",
