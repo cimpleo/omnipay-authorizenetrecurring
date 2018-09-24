@@ -25,8 +25,7 @@ Omnipay 3.x implementation of AuthorizeNetRecurring
 
 # Installation
 
-    composer require omnipay/common    
-    composer require "Here I should to insert an address from which to pull up the library"
+    composer require cimpleo/omnipay-authorizenetrecurring
 
 # Authorize.Net Reccuring
 
