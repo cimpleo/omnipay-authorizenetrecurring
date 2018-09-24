@@ -1,6 +1,7 @@
 {
     "name": "cimpleo/omnipay-authorizenetrecurring",
     "type": "library",
+    "license": "MIT",
     "description": "Authorize.Net processing library for the Omnipay 3.x which work just with Recurring Billing. Recurring Billing methods enable you to manage regular payment subscriptions in Authorize.Net Payment Gateway.",
     "keywords": [
         "authorize.net",
