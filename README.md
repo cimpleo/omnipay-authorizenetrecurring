@@ -13,7 +13,7 @@ Table of Contents
       * [Get Subscription Status](#get-subscription-status)
       * [Get Subscriptions List Info](#get-subscriptions-list-info)
       * [Get Customer Profile](#get-customer-profile)
-   * [Additional Information](#additional-information)
+   * [Other options for creating a subscription](#other-options-for-creating-a-subscription)
       * [Bank Account](#bank-account)
       * [Opaque Data](#opaque-data)
       * [Order](#order)
@@ -74,7 +74,7 @@ $card = new CreditCard([
     //'shippingFirstName', 'shippingLastName', 'shippingCompany', 'shippingAddress', 'shippingCity', 'billingState', 'shippingZip', 'shippingCountry'.
 ]);
 
-$response = $this->gateway->createSubscription([
+$response = $gateway->createSubscription([
     // Name of you subscription
     'subscriptionName' => 'Test Subscription',
     // Merchant-assigned reference ID for the request.
@@ -110,7 +110,7 @@ When you create a subscription from a profile, the credit card settings are not 
 use Omnipay\Omnipay;
 use Omnipay\AuthorizeNetRecurring;
 use Omnipay\AuthorizeNetRecurring\Objects\Schedule;
-use Academe\AuthorizeNetRecurring\Model\Profile;
+use Omnipay\AuthorizeNetRecurring\Objects\Profile;
 
 $gateway = Omnipay::create('AuthorizeNetRecurring_Recurring');
 
@@ -131,10 +131,8 @@ $profile = new Profile([
     'customerAddressId' => '1234567890'
 ]);
 
-$response = $this->gateway->createSubscription([
-    // Required. The payment gateway-assigned identification number for the subscription.
-    'subscriptionId' => '100748'
-    // Variable parameters of subscriptionName, amount, trialAmount or  currency.
+$response = $gateway->createSubscription([
+    // Variable parameters of subscriptionName, refId, amount, trialAmount or currency.
     'schedule' => $schedule,
     'profile' => $profile
 ])->send();
@@ -178,7 +176,7 @@ $card = new CreditCard([
 // Variable credit card parameters in the same format as when creating a subscription
 ]);
 
-$response = $this->gateway->updateSubscription([
+$response = $gateway->updateSubscription([
     // Required. The payment gateway-assigned identification number for the subscription.
     'subscriptionId' => '100748'
     // Variable parameters of subscriptionName, amount, trialAmount or  currency.
@@ -213,7 +211,7 @@ $gateway->setAuthName('API_LOGIN_ID');
 $gateway->setTransactionKey('API_TRANSACTION_KEY');
 $gateway->setTestMode(true);
 
-$response = $this->gateway->cancelSubscription([
+$response = $gateway->cancelSubscription([
     // Required. The payment gateway-assigned identification number for the subscription.
     'subscriptionId' => '100748',
     // If included in the request, this value is included in the response.
@@ -247,7 +245,7 @@ $gateway->setAuthName('API_LOGIN_ID');
 $gateway->setTransactionKey('API_TRANSACTION_KEY');
 $gateway->setTestMode(true);
 
-$response = $this->gateway->getSubscription([
+$response = $gateway->getSubscription([
     // Required. The payment gateway-assigned identification number for the subscription.
     'subscriptionId' => '100748',
     // If included in the request, this value is included in the response.
@@ -284,7 +282,7 @@ $gateway->setAuthName('API_LOGIN_ID');
 $gateway->setTransactionKey('API_TRANSACTION_KEY');
 $gateway->setTestMode(true);
 
-$response = $this->gateway->getSubscriptionStatus([
+$response = $gateway->getSubscriptionStatus([
     // Required. The payment gateway-assigned identification number for the subscription.
     'subscriptionId' => '100748',
     // If included in the request, this value is included in the response.
@@ -333,7 +331,7 @@ $search = new Search([
     'offset': '1'
 ]);
 
-$response = $this->gateway->getSubscriptionList([
+$response = $gateway->getSubscriptionList([
     // If included in the request, this value is included in the response.
     'refId': '123456',
     'search': $search
@@ -366,7 +364,7 @@ $gateway->setAuthName('API_LOGIN_ID');
 $gateway->setTransactionKey('API_TRANSACTION_KEY');
 $gateway->setTestMode(true);
 
-$response = $this->gateway->getCustomer([
+$response = $gateway->getCustomer([
     // Payment gateway-assigned ID associated with the customer profile.
     'customerProfileId' => '1505272217',
     // When set to true, this optional field requests that the issuer number (IIN) be included in the response, in the field issuerNumber.
@@ -386,9 +384,9 @@ var_dump($response->getMessage());
 // "Successful." or "Error."
 ```
 
-# Additional Information
+# Other options for creating a subscription
 
-When creating or changing a subscription, in addition to the credit card, you can also specify the Customer info, BankAccount, OpaqueData, and Order values:
+When creating or changing a subscription, in addition to the credit card, you can also specify BankAccount, OpaqueDatam, Order and Customer values:
 
 ## Bank Account:
 
@@ -397,7 +395,7 @@ When creating or changing a subscription, in addition to the credit card, you ca
 
 use Omnipay\Omnipay;
 use Omnipay\AuthorizeNetRecurring;
-use Academe\AuthorizeNet\Payment\BankAccount;
+use Omnipay\AuthorizeNetRecurring\Objects\BankAccount;
 
 $gateway = Omnipay::create('AuthorizeNetRecurring_Recurring');
 
@@ -408,7 +406,7 @@ $gateway->setTestMode(true);
 $bankAccount = new BankAccount([
     // The type of bank account used for the eCheck.Net transaction. The value of accountType must be valid for the echeckType value submitted.
     // Valid values: 'checking', 'savings', or 'businessChecking'.
-    'accountType' => '',
+    'accountType' => 'checking',
     // The ABA routing number. Numeric string, up to 9 digits.
     'routingNumber' => '123456789',
     // The bank account number. Numeric string, up to 17 digits.
@@ -419,10 +417,15 @@ $bankAccount = new BankAccount([
     // Valid Values: 'PPD', 'WEB', or 'CCD'. 
     'echeckType' => 'PPD',
     // String, up to 50 characters. The name of the bank.
-    'bankName' => 'Bank'
+    'bankName' => 'Bank',
+    'billingFirstName' => 'John',
+    'billingLastName' => 'Doe'
+    // Also here can be specified all other billing abd shipping parameters:
+    //'billingCompany', 'billingAddress', 'billingCity', 'billingState', 'billingZip', 'billingCountry',
+    //'shippingFirstName', 'shippingLastName', 'shippingCompany', 'shippingAddress', 'shippingCity', 'billingState', 'shippingZip', 'shippingCountry'.
 ]);
 
-$response = $this->gateway->createCustomer([
+$response = $gateway->createSubscription([
     // ... Other subscription data ... 
     'bankAccount' => $bankAccount
 ])->send();
@@ -435,7 +438,7 @@ $response = $this->gateway->createCustomer([
 
 use Omnipay\Omnipay;
 use Omnipay\AuthorizeNetRecurring;
-use Academe\AuthorizeNet\Payment\OpaqueData;
+use Omnipay\AuthorizeNetRecurring\Objects\OpaqueData;
 
 $gateway = Omnipay::create('AuthorizeNetRecurring_Recurring');
 
@@ -447,10 +450,15 @@ $opaqueData = new OpaqueData([
     // Specifies how the request should be processed. The value of dataDescriptor is based on the source of the value of dataValue. String, 128 characters.
     'dataDescriptor' => 'COMMON.ACCEPT.INAPP.PAYMENT',
     // Base64 encoded data that contains encrypted payment data. The payment gateway expects the encrypted payment data and meta data for the encryption keys. String, 8192 characters.
-    'dataValue' => 'Data'
+    'dataValue' => 'Base64 encoded data',
+    'billingFirstName' => 'John',
+    'billingLastName' => 'Doe'
+    // Also here can be specified all other billing abd shipping parameters:
+    //'billingCompany', 'billingAddress', 'billingCity', 'billingState', 'billingZip', 'billingCountry',
+    //'shippingFirstName', 'shippingLastName', 'shippingCompany', 'shippingAddress', 'shippingCity', 'billingState', 'shippingZip', 'shippingCountry'.
 ]);
 
-$response = $this->gateway->createCustomer([
+$response = $gateway->createSubscription([
     // ... Other subscription data ... 
     'opaqueData' => $opaqueData
 ])->send();
@@ -463,7 +471,7 @@ $response = $this->gateway->createCustomer([
 
 use Omnipay\Omnipay;
 use Omnipay\AuthorizeNetRecurring;
-use Academe\AuthorizeNet\Request\Model\Order;
+use Omnipay\AuthorizeNetRecurring\Objects\Order;
 
 $gateway = Omnipay::create('AuthorizeNetRecurring_Recurring');
 
@@ -478,9 +486,9 @@ $order = new Order([
     'description' => 'Description'
 ]);
 
-$response = $this->gateway->createCustomer([
+$response = $gateway->createSubscription([
     // ... Other subscription data ... 
-    'opaqueData' => $opaqueData
+    'order' => $order
 ])->send();
 ```
 
@@ -491,7 +499,7 @@ $response = $this->gateway->createCustomer([
 
 use Omnipay\Omnipay;
 use Omnipay\AuthorizeNetRecurring;
-use Academe\AuthorizeNetRecurring\Model\Customer;
+use Omnipay\AuthorizeNetRecurring\Objects\Customer;
 
 $gateway = Omnipay::create('AuthorizeNetRecurring_Recurring');
 
@@ -514,8 +522,8 @@ $customer = new Customer([
     'faxNumber' => '+1 (123) 555-12-34'
 ]);
 
-$response = $this->gateway->createCustomer([
+$response = $gateway->createSubscription([
     // ... Other subscription data ... 
-    'bankAccount' => $bankAccount
+    'customer' => $customer
 ])->send();
 ```

@@ -9,6 +9,24 @@ use Omnipay\Common\Exception\InvalidRequestException;
 class Search extends AbstractModel
 {
 
+    const SEARCH_TYPE_1 = 'cardExpiringThisMonth';
+    const SEARCH_TYPE_2 = 'subscriptionActive';
+    const SEARCH_TYPE_3 = 'subscriptionInactive';
+    const SEARCH_TYPE_4 = 'subscriptionExpiringThisMonth';
+
+    const ORDER_BY_1 = 'id';
+    const ORDER_BY_2 = 'name';
+    const ORDER_BY_3 = 'status';
+    const ORDER_BY_4 = 'createTimeStampUTC';
+    const ORDER_BY_5 = 'lastName';
+    const ORDER_BY_6 = 'firstName';
+    const ORDER_BY_7 = 'accountNumber';
+    const ORDER_BY_8 = 'amount';
+    const ORDER_BY_9 = 'pastOccurences';
+
+    const ORDER_DESCENDING_1 = 'true';
+    const ORDER_DESCENDING_2 = 'false';
+
     protected $searchType;
     protected $orderBy;
     protected $orderDescending;
@@ -17,82 +35,61 @@ class Search extends AbstractModel
 
     public function __construct($parameters = null) {
         parent::__construct();
-        if (isset($parameters['searchType'])) {
-            $this->setSearchType($parameters['searchType']);
-        }
-        if (isset($parameters['orderBy'])) {
-            $this->setOrderBy($parameters['orderBy']);
-        }
-        if (isset($parameters['orderDescending'])) {
-            $this->setOrderDescending($parameters['orderDescending']);
-        }
-        if (isset($parameters['limit'])) {
-            $this->setLimit($parameters['limit']);
-        }
-        if (isset($parameters['offset'])) {
-            $this->setOffset($parameters['offset']);
-        }
+
+        $this->setSearchType($parameters['searchType']);
+        $this->setOrderBy($parameters['orderBy']);
+        $this->setOrderDescending($parameters['orderDescending']);
+        $this->setLimit($parameters['limit']);
+        $this->setOffset($parameters['offset']);
     }
 
     public function jsonSerialize() {
-        $data = array(
-            'searchType' => $this->getSearchType(),
-            'orderBy' => $this->getOrderBy(),
-            'orderDescending' => $this->getOrderDescending(),
-            'limit' => $this->getLimit(),
-            'offset' => $this->getOffset()
-        );
+        $data = [];
+        if ($this->hasSearchType()) {
+            $data['searchType'] = $this->getSearchType();
+        }
+        if ($this->hasOrderBy()) {
+            $data['orderBy'] = $this->getOrderBy();
+        }
+        if ($this->hasOrderDescending()) {
+            $data['orderDescending'] = $this->getOrderDescending();
+        }
+        if ($this->hasLimit()) {
+            $data['limit'] = $this->getLimit();
+        }
+        if ($this->hasOffset()) {
+            $data['offset'] = $this->getOffset();
+        }
         return $data;
     }
 
     protected function setSearchType($value) {
-        if ($value != 'cardExpiringThisMonth' && $value != 'subscriptionActive' && $value != 'subscriptionInactive' && $value != 'subscriptionExpiringThisMonth') {
-            throw new InvalidRequestException('Search Type must have only this values: "cardExpiringThisMonth", "subscriptionActive", "subscriptionInactive", "subscriptionExpiringThisMonth".');
-        }
+        $this->assertValueSearchType($value);
         $this->searchType = $value;
-    }
-    protected function getSearchType() {
-        return $this->searchType;
     }
 
     protected function setOrderBy($value) {
-        if ($value != 'id' && $value != 'name' && $value != 'status' && $value != 'createTimeStampUTC' && $value != 'lastName' && $value != 'firstName' && $value != 'accountNumber' && $value != 'amount' && $value != 'pastOccurences') {
-            throw new InvalidRequestException('Order By must have only this values: "id", "name", "status", "createTimeStampUTC", "lastName", "firstName", "accountNumber", "amount", "pastOccurences".');
-        }
+        $this->assertValueOrderBy($value);
         $this->orderBy = $value;
-    }
-    protected function getOrderBy() {
-        return $this->orderBy;
     }
 
     protected function setOrderDescending($value) {
-        if ($value != 'true' && $value != 'false') {
-            throw new InvalidRequestException('Order Descending must have only this values: "true", "false".');
-        }
+        $this->assertValueOrderDescending($value);
         $this->orderDescending = $value;
     }
-    protected function getOrderDescending() {
-        return $this->orderDescending;
-    }
 
-    protected function setLimit($value) {
-        if ((int)$value < 1 || (int)$value > 1000) {
+    protected function setLimit(int $value) {
+        if ($value < 1 || $value > 1000) {
             throw new InvalidRequestException('Limit must have a value between 1 and 1000.');
         }
-        $this->limit = $value;
-    }
-    protected function getLimit() {
-        return $this->limit;
+        $this->limit = (string)$value;
     }
 
-    protected function setOffset($value) {
-        if ((int)$value < 1 || (int)$value > 1000) {
+    protected function setOffset(int $value) {
+        if ($value < 1 || $value > 1000) {
             throw new InvalidRequestException('Offset must have a value between 1 and 100000.');
         }
-        $this->offset = $value;
-    }
-    protected function getOffset() {
-        return $this->offset;
+        $this->offset = (string)$value;
     }
 
 }

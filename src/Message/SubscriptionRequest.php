@@ -29,12 +29,12 @@ abstract class SubscriptionRequest extends AbstractRequest
             $subscription['payment']['creditCard']['cardCode'] = $this->getCard()->getCvv();
         }
         // Bank Account fields
-        if (is_object($this->getBankAccount())) {
-            $subscription['bankAccount'] = $this->getBankAccount()->jsonSerialize();
+        else if (is_object($this->getBankAccount())) {
+            $subscription['payment']['bankAccount'] = $this->getBankAccount()->jsonSerialize();
         }
         // Opaque Data fields
-        if (is_object($this->getOpaqueData())) {
-            $subscription['opaqueData'] = $this->getOpaqueData()->jsonSerialize();
+        else if (is_object($this->getOpaqueData())) {
+            $subscription['payment']['opaqueData'] = $this->getOpaqueData()->jsonSerialize();
         }
         // Order fields
         if (is_object($this->getOrder())) {
@@ -50,6 +50,7 @@ abstract class SubscriptionRequest extends AbstractRequest
         }
         // Bill To and Ship To fields
         if (is_object($this->getCard())) {
+            // Bill To fields
             $subscription['billTo']['firstName'] = $this->getCard()->getBillingFirstName();
             $subscription['billTo']['lastName'] = $this->getCard()->getBillingLastName();
             $subscription['billTo']['company'] = $this->getCard()->getBillingCompany();
@@ -67,6 +68,46 @@ abstract class SubscriptionRequest extends AbstractRequest
             $subscription['shipTo']['state'] = $this->getCard()->getShippingState();
             $subscription['shipTo']['zip'] = $this->getCard()->getShippingPostcode();
             $subscription['shipTo']['country'] = $this->getCard()->getShippingCountry();
+        }
+        else if (is_object($this->getBankAccount())) {
+            // Bill To fields
+            $subscription['billTo']['firstName'] = $this->getBankAccount()->getBillingFirstName();
+            $subscription['billTo']['lastName'] = $this->getBankAccount()->getBillingLastName();
+            $subscription['billTo']['company'] = $this->getBankAccount()->getBillingCompany();
+            $subscription['billTo']['address'] = $this->getBankAccount()->getBillingAddress();
+            $subscription['billTo']['city'] = $this->getBankAccount()->getBillingCity();
+            $subscription['billTo']['state'] = $this->getBankAccount()->getBillingState();
+            $subscription['billTo']['zip'] = $this->getBankAccount()->getBillingZip();
+            $subscription['billTo']['country'] = $this->getBankAccount()->getBillingCountry();
+            // Ship To fields
+            $subscription['shipTo']['firstName'] = $this->getBankAccount()->getShippingFirstName();
+            $subscription['shipTo']['lastName'] = $this->getBankAccount()->getShippingLastName();
+            $subscription['shipTo']['company'] = $this->getBankAccount()->getShippingCompany();
+            $subscription['shipTo']['address'] = $this->getBankAccount()->getShippingAddress();
+            $subscription['shipTo']['city'] = $this->getBankAccount()->getShippingCity();
+            $subscription['shipTo']['state'] = $this->getBankAccount()->getShippingState();
+            $subscription['shipTo']['zip'] = $this->getBankAccount()->getShippingZip();
+            $subscription['shipTo']['country'] = $this->getBankAccount()->getShippingCountry();
+        }
+        else if (is_object($this->getOpaqueData())) {
+            // Bill To fields
+            $subscription['billTo']['firstName'] = $this->getOpaqueData()->getBillingFirstName();
+            $subscription['billTo']['lastName'] = $this->getOpaqueData()->getBillingLastName();
+            $subscription['billTo']['company'] = $this->getOpaqueData()->getBillingCompany();
+            $subscription['billTo']['address'] = $this->getOpaqueData()->getBillingAddress();
+            $subscription['billTo']['city'] = $this->getOpaqueData()->getBillingCity();
+            $subscription['billTo']['state'] = $this->getOpaqueData()->getBillingState();
+            $subscription['billTo']['zip'] = $this->getOpaqueData()->getBillingZip();
+            $subscription['billTo']['country'] = $this->getOpaqueData()->getBillingCountry();
+            // Ship To fields
+            $subscription['shipTo']['firstName'] = $this->getOpaqueData()->getShippingFirstName();
+            $subscription['shipTo']['lastName'] = $this->getOpaqueData()->getShippingLastName();
+            $subscription['shipTo']['company'] = $this->getOpaqueData()->getShippingCompany();
+            $subscription['shipTo']['address'] = $this->getOpaqueData()->getShippingAddress();
+            $subscription['shipTo']['city'] = $this->getOpaqueData()->getShippingCity();
+            $subscription['shipTo']['state'] = $this->getOpaqueData()->getShippingState();
+            $subscription['shipTo']['zip'] = $this->getOpaqueData()->getShippingZip();
+            $subscription['shipTo']['country'] = $this->getOpaqueData()->getShippingCountry();
         }
         return $subscription;
     }

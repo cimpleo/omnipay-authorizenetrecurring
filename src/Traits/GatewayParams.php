@@ -46,6 +46,18 @@ trait GatewayParams
     public function getSubscriptionId() {
         return $this->getParameter('subscriptionId');
     }
+
+    // Customer Profile Id
+    public function setCustomerProfileId($value) {
+        if (!is_string($value)) {
+            throw new InvalidRequestException('Customer Profile Id must be a string.');
+        }
+        return $this->setParameter('customerProfileId', $value);
+    }
+    public function getCustomerProfileId() {
+        return $this->getParameter('customerProfileId');
+    }
+
     public function setSubscriptionName($value) {
         if (!is_string($value)) {
             throw new InvalidRequestException('Subscription Name must be a string.');
