@@ -25,7 +25,7 @@ Omnipay 3.x implementation of AuthorizeNetRecurring
 
 # Installation
 
-    composer require cimpleo/omnipay-authorizenetrecurring
+    composer require league/omnipay:^3 cimpleo/omnipay-authorizenetrecurring
 
 # Authorize.Net Reccuring
 
