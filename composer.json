@@ -12,7 +12,7 @@
         "omnipay",
         "payment"
     ],
-    "homepage": "https://gitlab.com/cimpleo-sandbox/laravel-authorize",
+    "homepage": "https://github.com/cimpleo/omnipay-authorizenetrecurring",
     "authors": [
         {
             "name": "Cimpleo",
