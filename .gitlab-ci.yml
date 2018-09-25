@@ -1,0 +1,23 @@
+# Select image from https://hub.docker.com/_/php/
+image: php:7.0
+
+# Select what we should cache
+cache:
+  paths:
+  - vendor/
+
+before_script:
+# Install git, the php image doesn't have installed
+- apt-get update -yqq
+- apt-get install git -yqq
+
+# Install composer
+- curl -sS https://getcomposer.org/installer | php
+
+# Install all project dependencies
+- php composer.phar install
+
+# We test PHP7 with MySQL, but we allow it to fail
+test:app:
+  script:
+  - vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text
