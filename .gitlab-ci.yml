@@ -24,4 +24,4 @@ before_script:
 # We test PHP7 with MySQL, but we allow it to fail
 test:app:
   script:
-  - vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text
+  - ./vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text

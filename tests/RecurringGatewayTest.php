@@ -4,7 +4,7 @@ namespace Omnipay\AuthorizeNetRecurring;
 
 use Omnipay\Tests\GatewayTestCase;
 
-class RecurringGatewayTests extends GatewayTestCase
+class RecurringGatewayTest extends GatewayTestCase
 {
 
     protected function setUp() {
