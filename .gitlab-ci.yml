@@ -19,5 +19,7 @@ before_script:
 
 # We test PHP7 with MySQL, but we allow it to fail
 test:app:
+  only:
+    -master
   script:
   - vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text
