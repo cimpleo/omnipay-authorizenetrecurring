@@ -14,6 +14,10 @@ before_script:
 # Install composer
 - curl -sS https://getcomposer.org/installer | php
 
+# Install & enable Xdebug for code coverage reports
+- pecl install xdebug
+- docker-php-ext-enable xdebug
+
 # Install all project dependencies
 - php composer.phar install
 
