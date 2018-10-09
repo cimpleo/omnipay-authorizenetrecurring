@@ -29,7 +29,7 @@ Omnipay 3.x implementation of AuthorizeNetRecurring
 
 # Authorize.Net Reccuring
 
-The * Authorize.Net Reccuring * driver handles server-to-server requests.
+The *Authorize.Net Reccuring* driver handles server-to-server requests.
 It is used to create, modify and cancel subscriptions, as well as to display information about subscriptions and the customer.
 
 ## Create Subscription
